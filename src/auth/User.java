@@ -9,5 +9,7 @@ public class User {
 		this.phone=phone;
 	}
 	
-	//------- new version :-- 1. change password 2. change phone
+	//------- new version :-- 1. change password 2. change phone 3.delete user
+	
+	
 }
