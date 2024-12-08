@@ -12,6 +12,7 @@ public class SignUp {
 
 	{
 		projectName = new File(System.getProperty("user.dir")).getName();
+
 		File folder = new File("e:/Projects/" + projectName);
 		if (folder.exists()) {
 			f0 = new File("E:/Projects/" + projectName);
@@ -25,15 +26,20 @@ public class SignUp {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
+					try {
+						f.createNewFile();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			} else {
 				f0.mkdir();
 			}
 
 		} else {
-			f.mkdir();
+			folder.mkdir();
 		}
-		
+
 	}
 
 	public boolean sign(String phone, String password) throws Exception {
@@ -42,16 +48,10 @@ public class SignUp {
 		if (isUserExist2(phone)) {
 			System.out.println("User Already Exists!");
 		} else {
-
-			if (phone != null && phone.length() == 10) {
-				if (password.length() >= 6 && password.length() < 80) {
-					flag = saveToFile(phone, password);
-				}
-			} else {
-				System.out.println("invalid phone!");
-			}
+			flag = saveToFile(phone, password);
 
 		}
+
 		return flag;
 
 	}
@@ -59,16 +59,15 @@ public class SignUp {
 	public boolean saveToFile(String phone, String password) throws Exception {
 		boolean flag;
 		FileWriter fw = new FileWriter(f, true);
-		FileReader fr=new FileReader(f);
-		if(fr.read()==-1) {
-			fw.write("------------------ User Authentical Records ------------------\r\n"
-					+ "phone   password\n\n");
+		FileReader fr = new FileReader(f);
+		if (fr.read() == -1) {
+			fw.write("------------------ User Authentical Records ------------------\r\n" + "phone   password\n\n");
 		}
 		fr.close();
-		
+
 		fw.write(phone + " ");
 		fw.flush();
-		fw.write(password+"\n");
+		fw.write(password + "\n");
 		fw.flush();
 		fw.close();
 		flag = true;
@@ -83,7 +82,7 @@ public class SignUp {
 		char arr[] = new char[1000];
 		int count = 0;
 		int x = fr.read();
-		
+
 		while (x > -1) {
 			count++;
 			arr[count] = (char) x;
@@ -95,43 +94,40 @@ public class SignUp {
 		String s1[] = data.split("\n");
 		for (int i = 0; i < s1.length; i++) {
 			String temp[] = (s1[i]).split(" ");
-			String phone2=(temp[0].replace(" ", ""));
-			String password2=null;
-			try{
-				password2=(temp[1]).replace(" ", "");
-			}catch (Exception e) {
+			String phone2 = (temp[0].replace(" ", ""));
+			String password2 = null;
+			try {
+				password2 = (temp[1]).replace(" ", "");
+			} catch (Exception e) {
 				// TODO: handle exception
-			}finally {
-				try{
-					password2=(temp[1]).replace(" ", "");
-				}catch(Exception e) {
+			} finally {
+				try {
+					password2 = (temp[1]).replace(" ", "");
+				} catch (Exception e) {
 //					System.out.println(e.getLocalizedMessage());
 				}
 			}
 //			System.out.println("phone: "+phone);
 //			System.out.println("password: "+password);
-			
+
 			if (phone2.equals(phone) && password2.equals(password)) {
 				flag = true;
 				break;
-			}else if(phone2.equals(phone) && password2.equals(password)==false){
+			} else if (phone2.equals(phone) && password2.equals(password) == false) {
 				try {
 					throw new InvalidUserCredential("unmatched password!");
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					System.out.println(e.getLocalizedMessage());
 					break;
 				}
-			}else if(phone2.equals(password)==true&&password2.equals(phone) ==false){
+			} else if (phone2.equals(password) == true && password2.equals(phone) == false) {
 				try {
 					throw new InvalidUserCredential("unmatched phone!");
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					System.out.println(e.getLocalizedMessage());
 					break;
 				}
 			}
-			
 
 		}
 		fr.close();
